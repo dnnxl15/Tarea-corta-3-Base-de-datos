@@ -1,0 +1,376 @@
+/**
+ * DDL Command
+ * Description: The next command create the table student with those attributes.
+ * Author: Danny Xie Li
+ * Created: 9/04/18
+ * Last modification: 9/04/18
+*/
+
+CREATE TABLE Student
+(
+    idStudent INT IDENTITY(1,1) PRIMARY KEY,
+    photo VARCHAR(100),
+    cardIdentification INT NOT NULL,
+    carrerIdentification INT NULL,
+    nameStudent VARCHAR(100) NOT NULL,
+    dateAdmission DATE NOT NULL,
+    curriculum VARCHAR(100) NOT NULL,
+    license INT
+);
+
+/**
+ * DDL Command
+ * Description: The next command create the primary key in the table student using the idStudent as the primary key.
+ * Author: Danny Xie Li
+ * Created: 9/04/18
+ * Last modification: 9/04/18
+*/
+
+ALTER TABLE Student 
+ADD PRIMARY KEY(idStudent);
+
+/**
+ * DDL Command
+ * Description: The next command create the table Carrer with those attributes.
+ * Author: Danny Xie Li
+ * Created: 9/04/18
+ * Last modification: 9/04/18
+*/
+
+CREATE TABLE Carrer(
+    nameCarrer VARCHAR(100) NOT NULL,
+    location VARCHAR(100) NOT NULL,
+    idCarrer INT IDENTITY(1,1) PRIMARY KEY,
+    attendant VARCHAR(100) NULL,
+    carrerIdentification INT
+);
+
+/**
+ * DDL Command
+ * Description: The next command create the primary key in the table carrer using the idCarrer as the primary key.
+ * Author: Danny Xie Li
+ * Created: 9/04/18
+ * Last modification: 9/04/18
+*/
+
+ALTER TABLE Carrer 
+ADD PRIMARY KEY(idCarrer);
+
+/**
+ * DDL Command
+ * Description: The next command create the column idCarrer in the table student.
+ * Author: Danny Xie Li
+ * Created: 9/04/18
+ * Last modification: 9/04/18
+*/
+
+ALTER TABLE Student 
+ADD idCarrer INT NULL;
+
+/**
+ * DDL Command
+ * Description: The next command create the foreign key idCarrer in the table student.
+ * Author: Danny Xie Li
+ * Created: 9/04/18
+ * Last modification: 9/04/18
+*/
+ALTER TABLE Student 
+ADD FOREIGN KEY (idCarrer) 
+REFERENCES Carrer(idCarrer);
+
+/**
+ * DDL Command
+ * Description: The next procedure insert into student.
+ * Author: Danny Xie Li
+ * Created: 9/04/18
+ * Last modification: 9/04/18
+*/
+CREATE PROCEDURE insertStudent(@pName VARCHAR(100), @pPhoto VARCHAR(100), @pCardIdentification INT, 
+@pLicense INT, @pCurriculum VARCHAR(100), @pDateAdmission DATE, @pCarrerIdentification INT) AS
+BEGIN 
+    INSERT INTO Student(photo, cardIdentification, carrerIdentification, nameStudent,
+    dateAdmission, curriculum, license, idCarrer)
+    VALUES(@pPhoto, @pCardIdentification, @pCarrerIdentification, @pName, @pDateAdmission,
+    @pCurriculum, @pLicense, (SELECT idCarrer FROM Carrer WHERE (Carrer.carrerIdentification =  @pCarrerIdentification) 
+    OR @pCarrerIdentification = NULL))
+END;
+
+/**
+ * DDL Command
+ * Description: The next command execute the procedure.
+ * Author: Danny Xie Li
+ * Created: 9/04/18
+ * Last modification: 9/04/18
+*/
+EXEC dbo.insertStudent 'Esteban', 'url', 123456, 654321, 'Good guy', '2008-01-08', 521; 
+
+/**
+ * DDL Command
+ * Description: The next procedure insert into Carrer.
+ * Author: Danny Xie Li
+ * Created: 9/04/18
+ * Last modification: 9/04/18
+*/
+CREATE PROCEDURE insertCarrer(@pNameCarrer VARCHAR(100), @pLocation VARCHAR(100), @pAttendant VARCHAR(100),
+ @pCarrerIdentification INT) AS
+BEGIN 
+    INSERT INTO Carrer(nameCarrer, location, attendant, carrerIdentification)
+    VALUES(@pNameCarrer, @pLocation, @pAttendant, @pCarrerIdentification)
+END;
+
+/**
+ * DDL Command
+ * Description: The next command execute the procedure.
+ * Author: Danny Xie Li
+ * Created: 9/04/18
+ * Last modification: 9/04/18
+*/
+EXEC dbo.insertCarrer 'Ingeniería en computación', 'TEC', 'Julio Cesar', 521; 
+
+/**
+ * DDL Command
+ * Description: The next procedure update into student.
+ * Author: Danny Xie Li
+ * Created: 10/04/18
+ * Last modification: 10/04/18
+*/
+CREATE PROCEDURE updateStudent(@pLicense INT, @pPhoto VARCHAR(100), @pCardIdentification INT,
+@pCarrerIdentification INT, 
+@pNameStudent VARCHAR(100), @pDateAdmission DATE, @pCurriculum VARCHAR(100)) AS
+BEGIN 
+UPDATE Student
+SET photo = @pPhoto, cardIdentification = @pCardIdentification,
+carrerIdentification = (SELECT carrerIdentification FROM Carrer WHERE (@pCarrerIdentification = Carrer.carrerIdentification) OR /*If the idCarrer doesn't exist = null */
+(@pCarrerIdentification = NULL)), nameStudent = @pNameStudent,
+dateAdmission = @pDateAdmission, curriculum = @pCurriculum, idCarrer = (SELECT idCarrer FROM 
+Carrer WHERE Carrer.carrerIdentification = @pCarrerIdentification)
+WHERE Student.license = @pLicense
+END;
+
+/**
+ * DDL Command
+ * Description: The next command execute the procedure.
+ * Author: Danny Xie Li
+ * Created: 9/04/18
+ * Last modification: 10/04/18
+*/
+EXEC dbo.updateStudent 654321, 'happy.png', '987654', 12, 'Esteban', '2008-05-08', 'Bad Boy'; 
+
+/**
+ * DDL Command
+ * Description: The next procedure update into Carrer.
+ * Author: Danny Xie Li
+ * Created: 10/04/18
+ * Last modification: 10/04/18
+*/
+CREATE PROCEDURE updateCarrer(@nameCarrer VARCHAR(100), @pLocation VARCHAR(100), @pAttendant
+VARCHAR(100), @pCarrerIdentification INT) AS
+BEGIN 
+UPDATE Carrer
+SET location = @pLocation,
+attendant = @pAttendant,
+carrerIdentification = @pCarrerIdentification
+WHERE Carrer.nameCarrer = @nameCarrer
+
+UPDATE Student
+SET carrerIdentification = (SELECT carrerIdentification FROM Carrer WHERE Carrer.nameCarrer = 
+@nameCarrer)
+WHERE Student.idCarrer = (SELECT idCarrer FROM Carrer WHERE Carrer.nameCarrer = @nameCarrer)
+END;
+
+/**
+ * DDL Command
+ * Description: The next command execute the procedure.
+ * Author: Danny Xie Li
+ * Created: 10/04/18
+ * Last modification: 10/04/18
+*/
+EXEC dbo.updateCarrer 'Ingenieria en conputacion', 'Limon', 'Jose Gomez', 526; 
+
+/**
+ * DDL Command
+ * Description: The next procedure delete student.
+ * Author: Danny Xie Li
+ * Created: 11/04/18
+ * Last modification: 11/04/18
+*/
+CREATE PROCEDURE deleteStudent(@pLicense INT) AS
+BEGIN
+DELETE FROM Student 
+WHERE license = @pLicense
+END;
+
+/**
+ * DDL Command
+ * Description: The next command execute the procedure.
+ * Author: Danny Xie Li
+ * Created: 11/04/18
+ * Last modification: 11/04/18
+*/
+EXEC dbo.deleteStudent 654321; 
+
+
+/**
+ * DDL Command
+ * Description: The next procedure delete all student.
+ * Author: Danny Xie Li
+ * Created: 11/04/18
+ * Last modification: 11/04/18
+*/
+CREATE PROCEDURE deleteAllStudent AS
+BEGIN
+DELETE FROM Student 
+END;
+
+/**
+ * DDL Command
+ * Description: The next command execute the procedure.
+ * Author: Danny Xie Li
+ * Created: 11/04/18
+ * Last modification: 11/04/18
+*/
+EXEC dbo.deleteAllStudent; 
+
+/**
+ * DDL Command
+ * Description: The next procedure delete an specific carrer, this receive the carrerIdentification.
+ * Author: Danny Xie Li
+ * Created: 11/04/18
+ * Last modification: 11/04/18
+*/
+CREATE PROCEDURE deleteCarrer(@pCarrerIdentification INT) AS
+BEGIN
+UPDATE Student 
+SET idCarrer = NULL,
+carrerIdentification = NULL
+WHERE idCarrer = (SELECT idCarrer FROM Carrer WHERE carrerIdentification = @pCarrerIdentification)
+
+DELETE FROM Carrer WHERE @pCarrerIdentification = carrerIdentification
+END;
+
+/**
+ * DDL Command
+ * Description: The next command execute the procedure.
+ * Author: Danny Xie Li
+ * Created: 11/04/18
+ * Last modification: 11/04/18
+*/
+EXEC dbo.deleteCarrer 521; 
+
+/**
+ * DDL Command
+ * Description: The next command get student by carrer.
+ * Author: Danny Xie Li
+ * Created: 12/04/18
+ * Last modification: 12/04/18
+*/
+CREATE PROCEDURE getStudentByCarrer(@pCarrer INT) AS
+BEGIN
+SELECT photo, cardIdentification, carrerIdentification, nameStudent, dateAdmission, curriculum,
+license FROM Student
+WHERE carrerIdentification = @pCarrer
+END;
+
+/**
+ * DDL Command
+ * Description: The next command execute the procedure.
+ * Author: Danny Xie Li
+ * Created: 12/04/18
+ * Last modification: 12/04/18
+*/
+EXEC dbo.getStudentByCarrer 521; 
+
+/**
+ * DDL Command
+ * Description: The next command count the mount of student by carrer.
+ * Author: Danny Xie Li
+ * Created: 12/04/18
+ * Last modification: 12/04/18
+*/
+CREATE PROCEDURE countStudentByCarrer() AS
+BEGIN
+SELECT Carrer.nameCarrer AS NameCarrer, COUNT(Student.idCarrer) AS Cantidad
+FROM Student
+INNER JOIN Carrer ON 
+Carrer.idCarrer = Student.idCarrer
+GROUP BY Carrer.nameCarrer
+END;
+
+/**
+ * DDL Command
+ * Description: The next command execute the procedure.
+ * Author: Danny Xie Li
+ * Created: 12/04/18
+ * Last modification: 12/04/18
+*/
+EXEC dbo.countStudentByCarrer; 
+
+/**
+ * DDL Command
+ * Description: The next command count the total mount of student.
+ * Author: Danny Xie Li
+ * Created: 12/04/18
+ * Last modification: 12/04/18
+*/
+CREATE PROCEDURE countTotalStudent AS
+BEGIN
+SELECT COUNT(1) AS Cantidad
+FROM Student
+END;
+
+/**
+ * DDL Command
+ * Description: The next command execute the procedure.
+ * Author: Danny Xie Li
+ * Created: 12/04/18
+ * Last modification: 12/04/18
+*/
+EXEC dbo.countTotalStudent; 
+
+/**
+ * DDL Command
+ * Description: The next command return an amount and the student on that admission date.
+ * Author: Danny Xie Li
+ * Created: 12/04/18
+ * Last modification: 12/04/18
+*/
+CREATE PROCEDURE studentInCarrerByYear AS
+BEGIN
+SELECT COUNT(Student.idCarrer) AS Cantidad, Carrer.nameCarrer AS CarrerName, 
+Student.dateAdmission AS DateAdmission
+FROM Carrer INNER JOIN 
+Student ON Student.idCarrer = Carrer.idCarrer
+GROUP BY DateAdmission, Carrer.nameCarrer
+END;
+
+/**
+ * DDL Command
+ * Description: The next command execute the procedure.
+ * Author: Danny Xie Li
+ * Created: 12/04/18
+ * Last modification: 12/04/18
+*/
+EXEC dbo.studentInCarrerByYear; 
+
+/**
+ * DDL Command
+ * Description: The next command return an amount of the student by year.
+ * Author: Danny Xie Li
+ * Created: 12/04/18
+ * Last modification: 12/04/18
+*/
+CREATE PROCEDURE getStudentTotalByYear AS
+BEGIN
+SELECT dateAdmission AS DateAdmission, COUNT(dateAdmission) AS MountStudent
+FROM Student
+GROUP BY dateAdmission
+END;
+
+/**
+ * DDL Command
+ * Description: The next command execute the procedure.
+ * Author: Danny Xie Li
+ * Created: 12/04/18
+ * Last modification: 12/04/18
+*/
+EXEC dbo.getStudentTotalByYear; 
