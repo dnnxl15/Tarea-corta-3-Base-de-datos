@@ -1,0 +1,119 @@
+﻿@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Sign Up Administrator</title>
+</head>
+<body>
+    <div>
+        <h2 class="title">Carrera</h2>
+    </div>
+    <div class="form">
+        <div class="form-action">
+            <i id="icon" class="form-icon"></i>
+        </div>
+        <form method="post" runat="server" action="SaveCarrer">
+            <div class="form-inputs">
+                <div class="form-input">
+                    <label for="Name">Identificador de carrera</label>
+                    <input data-val="true"
+                           runat="server" type="text" name="identificator" />
+                </div>
+                <div class="form-input">
+                    <label for="Lastname">Nombre</label>
+                    <!--    <input type="text" name="pLastname" id="" value="" />-->
+                    <input data-val="true"
+                           runat="server" type="number" name="nombre" />
+                </div>
+                <div class="form-input">
+                    <label for="Email">Encargado</label>
+                    <!--    <input type="text" name="pEmail" id="" value="" /> -->
+                    <input data-val="true"
+                           runat="server" type="text" name="encargado" />
+                </div>
+                <div class="form-input">
+                    <label for="carIden">Ubicacion</label>
+                    <!--    <input type="text" name="pAddress" id="" value="" /> -->
+                    <input data-val="true"
+                           runat="server" type="number" name="ubication" />
+
+                </div>
+            </div>
+            <input type="button" class="form-button form-button__cancel" value="Cancel" />
+            <input type="submit" class="form-button form-button__submit" value="Registrar" />
+        </form>
+
+
+        <div>
+            <h2 class="title">Editar carrera</h2>
+        </div>
+        <form method="post" runat="server" action="EditCarrer">
+            <div class="form-inputs">
+                <div class="form-input">
+                    <label for="Name">Identificador de carrera</label>
+                    <input data-val="true"
+                           runat="server" type="text" name="identificatorUpdate" />
+                </div>
+                <div class="form-input">
+                    <label for="Lastname">Nombre</label>
+                    <!--    <input type="text" name="pLastname" id="" value="" />-->
+                    <input data-val="true"
+                           runat="server" type="number" name="nombreUpdate" />
+                </div>
+                <div class="form-input">
+                    <label for="Email">Encargado</label>
+                    <!--    <input type="text" name="pEmail" id="" value="" /> -->
+                    <input data-val="true"
+                           runat="server" type="text" name="encargadoUpdate" />
+                </div>
+                <div class="form-input">
+                    <label for="carIden">Ubicacion</label>
+                    <!--    <input type="text" name="pAddress" id="" value="" /> -->
+                    <input data-val="true"
+                           runat="server" type="number" name="ubicationUpdate" />
+
+                </div>
+            </div>
+            <input type="button" class="form-button form-button__cancel" value="Cancel" />
+            <input type="submit" class="form-button form-button__submit" value="edit" />
+        </form>
+
+        <div>
+            <h2 class="title">Elminar carrera</h2>
+        </div>
+        <form method="post" runat="server" action="DeleteCarrer">
+            <div class="form-inputs">
+                <div class="form-input">
+                    <label for="Name">Identificador de carrera</label>
+                    <input data-val="true"
+                           runat="server" type="text" name="identificatorDelete" />
+                </div>
+            </div>
+            <input type="button" class="form-button form-button__cancel" value="Cancel" />
+            <input type="submit" class="form-button form-button__submit" value="delete" />
+        </form>
+    </div>
+
+    <div>
+        <h2 class="title">Mostrar carreras</h2>
+    </div>
+
+    @foreach (var str in ViewBag.collectionCarrer)
+    {
+    <div>
+        <h2>@Html.Raw(str.Name)</h2>
+        <h5>Identificador @Html.Raw(str.Price)</h5>
+        <h5>Nombre @Html.Raw(str.Category)</h5>
+        <h5>Encargado @Html.Raw(str.Category)</h5>
+        <h5>Ubicación @Html.Raw(str.Category)</h5>
+
+    </div>
+    }
+
+    </body>
+</html>
