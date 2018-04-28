@@ -1,0 +1,73 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Sign Up Administrator</title>
+   </head>
+<body>
+    <div>
+        <h2 class="title">El Baratico</h2>
+    </div>
+    <div class="form">
+        <div class="form-action">
+            <h2 class="form-heading" id="Label1">Create your account as a Administrator</h2>
+            <i id="icon" class="form-icon"></i>
+        </div>
+        <form method="post" runat="server" action="saveAdministrator">
+            <div class="form-inputs">
+                <div class="form-input">
+                    <label for="Name">Name</label>
+                    <input data-val="true"
+                           runat="server" type="text" name="pName" />
+                </div>
+                <div class="form-input">
+                    <label for="Lastname">Lastname</label>
+                    <!--    <input type="text" name="pLastname" id="" value="" />-->
+                    <input data-val="true"
+                           runat="server" type="text" name="pLastname" />
+                </div>
+                <div class="form-input">
+                    <label for="Email">Email</label>
+                    <!--    <input type="text" name="pEmail" id="" value="" /> -->
+                    <input data-val="true"
+                           runat="server" type="text" name="pEmail" />
+                </div>
+                <div class="form-input">
+                    <label for="Address">Address</label>
+                    <!--    <input type="text" name="pAddress" id="" value="" /> -->
+                    <input data-val="true"
+                           runat="server" type="text" name="pAddress" />
+                </div>
+                <div class="form-input">
+                    <label for="Username">Username</label>
+                    <!--    <input type="text" name="pUsername" id="" value="" /> -->
+                    <input data-val="true"
+                           runat="server" type="text" name="pUsername" />
+        
+                </div>
+                <div class="form-input">
+                    <label for="Password">Password</label>
+                    <!--        <input type="password" name="pPassword" id="" value="" /> -->
+                    <input data-val="true"
+                           ID="txtPassword"
+                           runat="server" type="Password" name="pPassword" />
+                </div>
+                <div class="form-input">
+                    <label for="Confirm">Confirm password</label>
+                    <!--          <input type="password" name="pConfirm" id="" value="" /> -->
+                    <input data-val="true"
+                           ID="txtConfirmPassword"
+                           runat="server" type="Password" name="pConfirm" />
+
+                </div>
+            </div>
+            <input type="button" class="form-button form-button__cancel" value="Cancel" />
+            <input type="submit" class="form-button form-button__submit" value="Sign Up" />
+        </form>
+        <h4> Have an account?</h4>
+        <a href="loginUser">Sign in here</a>
+    </div>
+    
+</body>
+</html>

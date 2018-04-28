@@ -287,7 +287,7 @@ EXEC dbo.getStudentByCarrer 521;
  * Created: 12/04/18
  * Last modification: 12/04/18
 */
-CREATE PROCEDURE countStudentByCarrer() AS
+CREATE PROCEDURE countStudentByCarrer AS
 BEGIN
 SELECT Carrer.nameCarrer AS NameCarrer, COUNT(Student.idCarrer) AS Cantidad
 FROM Student
@@ -374,3 +374,25 @@ END;
  * Last modification: 12/04/18
 */
 EXEC dbo.getStudentTotalByYear; 
+
+/**
+ * DDL Command
+ * Description: The next command return all the carrer.
+ * Author: Danny Xie Li
+ * Created: 27/04/18
+ * Last modification: 27/04/18
+*/
+CREATE PROCEDURE getCarrer AS
+BEGIN
+SELECT *
+FROM Carrer
+END;
+
+/**
+ * DDL Command
+ * Description: The next command execute the procedure.
+ * Author: Danny Xie Li
+ * Created: 27/04/18
+ * Last modification: 27/04/18
+*/
+EXEC dbo.getCarrer; 
